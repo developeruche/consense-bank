@@ -1,0 +1,51 @@
+.modal__home__container {
+  position: relative;
+}
+
+.pop__modal__container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  backdrop-filter: blur(8px);
+  background-color: rgba(17, 17, 17, 0.2);
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+}
+
+.pop__modal {
+  padding: 2rem;
+  width: 900px;
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  place-items: center;
+}
+
+.pop__modal__cta {
+  padding: 0.5rem;
+  border-radius: 5px;
+  background-color: rgba(86, 72, 72, 0.229);
+  backdrop-filter: blur(8px);
+  margin: 0.6rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.pop__modal__cta img {
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  margin-bottom: 10px;
+}
+
+.pop__modal__cta p {
+  font-size: 12px;
+  font-family: "Montserrat";
+  color: rgba(240, 248, 255, 0.696);
+}

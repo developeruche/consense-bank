@@ -1,0 +1,60 @@
+.page_layout {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    height: 100vh;
+}
+
+.page__section__one {
+    height: 100vh;
+    
+}
+
+.page__section__two {
+    flex: 1;
+    overflow-y: scroll;
+}
+
+.s_components {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    justify-content: space-between;
+}
+
+.s_component__logo {
+    padding: 10px;  
+}
+
+.s_component__logo i {
+    font-size: 30px;
+    color: white;
+}
+
+.s_component__menu {
+
+}
+
+.s_component__menu__item {
+    font-size: 20px;
+    color: white;
+    margin-top: 30px;
+    width: fit-content;
+    cursor: pointer;
+    padding: 10px;
+}
+
+.active_bar{
+    background-color: rgb(31, 32, 38);
+    border-radius: 5px;
+}
+
+.s_component__logout {
+    font-size: 20px;
+    color: white;
+    margin-top: 30px;
+    width: fit-content;
+    cursor: pointer;
+    padding: 10px;
+}

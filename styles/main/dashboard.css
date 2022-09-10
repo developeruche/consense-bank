@@ -1,0 +1,367 @@
+.main {
+  padding: 14px;
+  display: flex;
+}
+
+.main__setion__one {
+  flex: 1;
+}
+
+.right {
+  width: 400px;
+}
+
+.center__overview {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.center__overview p {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.988);
+  font-family: monospace;
+}
+
+.center__overview h2 {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.center__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.center__header__section__one h2 {
+  font-family: "Anek Telugu", sans-serif;
+  color: white;
+}
+.center__header__section__two {
+  color: #ffffff;
+}
+
+.center__overview__toggle {
+  border-radius: 999px;
+  font-family: 'Courier New', Courier, monospace;
+}
+.center__overview__toggle__btn {
+  background: #1f2026;
+  color: #ffffff;
+  border: 0;
+  padding: 12px 16px;
+  cursor: pointer;
+  font-family: 'Courier New', Courier, monospace;
+
+}
+
+.center__overview__toggle__btn_active {
+  border: 1px solid rgba(255, 255, 255, 0.153);
+  background: #1a1b21;
+}
+
+.center__overview__toggle__btn__left {
+  border-top-left-radius: 999px;
+  border-bottom-left-radius: 999px;
+}
+
+.center__overview__toggle__btn__right {
+  border-top-right-radius: 999px;
+  border-bottom-right-radius: 999px;
+}
+.center__display {
+  min-height: 300px;
+  background-color: rgb(31, 32, 38);
+  border-radius: 6px;
+  padding-bottom: 13px;
+}
+
+.center__display__stable {
+  padding: 10px;
+  padding-bottom: 20px;
+}
+
+.center__display__stable__item {
+  height: 70px;
+  width: 63px;
+  border-radius: 5px;
+  background-color: rgba(19, 19, 22, 0);
+}
+
+.center__display__coin {
+  padding: 10px;
+}
+
+.center__display hr {
+  width: 95%;
+  margin: auto;
+  border: 1px solid rgba(255, 255, 255, 0.153);
+  margin-top: 10px;
+}
+
+.center__display .uuu {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.621);
+  padding-left: 10px;
+  margin-bottom: -7px;
+  padding: 15px;
+}
+
+.transfer__token__form {
+  display: flex;
+  flex-direction: column;
+  height: 45vh;
+  padding: 20px 20px 0px;
+}
+
+.transfer__token__form__erc20,
+.transfer__token__form__addr__to {
+  margin-bottom: 20px;
+}
+
+.transfer__token__form__amount {
+  display: flex;
+}
+
+.transfer__token__form__amount__input {
+  border: 1px solid rgba(255, 255, 255, 0.106);
+  padding: 12px;
+  border-radius: 5px;
+  outline: none;
+  background-color: transparent;
+  font-family: monospace;
+  color: rgba(255, 255, 255, 0.907);
+}
+
+.transfer__token__form__amount__max {
+  margin-left: 16px;
+  border: 0;
+  padding: 1px 16px;
+  background: #131316;
+  border-radius: 5px;
+  height: 40px;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.transfer__token__form__action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+}
+
+.transfer__token__form__action__btn {
+  border: 0;
+  background: #131316;
+  border-radius: 5px;
+  height: 40px;
+  color: #ffffff;
+  cursor: pointer;
+  padding: 2px 16px;
+}
+
+.transfer__token__form__error {
+  color: red;
+  margin: 2px 0px 0px 0px;
+  font-size: 14px;
+}
+
+.check__address__form {
+  margin-top: 10px;
+  padding: 16px;
+}
+
+.check__address__form__input,
+.transfer__token__form__erc20__input,
+.transfer__token__form__addr__to__input {
+  width: 100%;
+  border: 0;
+  padding: 12px;
+  border-radius: 5px;
+  outline: none;
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.106);
+  color: white;
+  font-family: monospace;
+  font-size: 18px;
+}
+
+.check__address__form__btn {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+}
+
+.check__address__form__btn__submit {
+  border: 0;
+  background: #131316;
+  border-radius: 5px;
+  height: 40px;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.check__address__form__btn__submit:nth-child(1) {
+  padding: 10px;
+}
+
+.check__address__form__btn__submit:nth-child(2) {
+  margin-left: 10px;
+  padding: 1px 30px;
+}
+
+.query__balance__result {
+  color: #ffffff;
+  font-size: 18px;
+  margin-top: 12px;
+  font-family: monospace;
+}
+
+.deposit-details {
+  margin-top: 40px;
+  border-radius: 4px;
+  background: #1f2026;
+  height: 40vh;
+}
+
+.right__nft__list__wrapper {
+  padding: 1rem;
+}
+
+.right__nft__list {
+  min-height: 400px;
+  background-color: rgb(31, 32, 38);
+  border-radius: 5px;
+  padding: 4px;
+}
+
+.center__display__stable {
+  display: flex;
+  padding: 6px;
+  width: 100%;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  padding-left: 20px;
+  padding-bottom: 20px;
+}
+
+.center__display__stable__item {
+  padding: 10px;
+  margin-right: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.center__display__stable__item img {
+  width: 44px;
+  width: 44px;
+}
+
+.center__display__stable__item p {
+  font-size: 13px;
+  color: white;
+}
+
+.center__display__stable::-webkit-scrollbar {
+  display: none;
+}
+
+.center__display__coin {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+}
+
+.center__display__crypto__item {
+  height: 70px;
+  width: 63px;
+  border-radius: 5px;
+  background-color: rgba(19, 19, 22, 0);
+  padding: 1rem;
+  padding: 10px;
+  margin-right: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.center__display__crypto__item img {
+  width: 44px;
+  width: 44px;
+}
+
+.center__display__crypto__item p {
+  font-size: 13px;
+  color: white;
+}
+
+.dropdown {
+  background: #1f2026;
+  padding: 10px 16px;
+  border-radius: 5px;
+  display: flex;
+  cursor: pointer;
+  justify-content: space-between;
+  color: #ffffff;
+}
+
+.dropdown-details {
+  margin-top: 4px;
+  width: 11rem;
+  background: #1f2026;
+  padding: 8px 12px 20px;
+  border-radius: 4px;
+  position: absolute;
+  z-index: 3;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.25);
+  right: 3.4rem;
+}
+
+.dropdown-details-multisig {
+  margin-top: 14px;
+  color: #ffffff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.multisig__form__input {
+  border: 1px solid #131316;
+  padding: 12px;
+  border-radius: 5px;
+  margin-bottom: 12px;
+  width: 100%;
+}
+
+.multisig__form__btn {
+  background: #1f2026;
+  color: #ffffff;
+  border: 0;
+  padding: 10px 20px;
+  border-radius: 4px;
+}
+
+.right {
+  padding: 15px;
+}
+
+.right__header__second {
+  display: flex;
+}
+
+.right__header {
+  display: flex;
+  padding: 10px;
+  justify-content: space-between;
+
+  align-items: start;
+}
+
+
+
+
+
+
+
