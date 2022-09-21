@@ -3,7 +3,7 @@ import Head from "next/head";
 import { SetStateAction, useEffect, useState } from "react";
 import Page from "../components/Layout";
 import PopModal from "../components/Modal";
-import { get_chain, get_balances, get_transaction } from "../utils/action";
+// import { get_chain, get_balances, get_transaction } from "../utils/action";
 import { useAccount } from "wagmi";
 import CenterDeposit from "../components/CenterDeposit";
 import RightDeposit from "../components/RightDeposit";
@@ -33,40 +33,40 @@ const Deposit: NextPage = () => {
     setChainId(y);
   };
 
-  const _get_chain = async () => {
-    let res: SetStateAction<any> = await get_chain();
-    setChains(res);
-  };
+  // const _get_chain = async () => {
+  //   let res: SetStateAction<any> = await get_chain();
+  //   setChains(res);
+  // };
 
-  const _get_balance = async (chainId: string, address: string) => {
-    let [r_cryptocurrency, r_stablecoin, r_nft, asset__value, pie_data] =
-      await get_balances(chainId, address);
-    setCrypto(r_cryptocurrency);
-    setStablecoin(r_stablecoin);
-    setNft(r_nft);
-    setBal(asset__value);
-    setPieData(pie_data);
-  };
+  // const _get_balance = async (chainId: string, address: string) => {
+  //   let [r_cryptocurrency, r_stablecoin, r_nft, asset__value, pie_data] =
+  //     await get_balances(chainId, address);
+  //   setCrypto(r_cryptocurrency);
+  //   setStablecoin(r_stablecoin);
+  //   setNft(r_nft);
+  //   setBal(asset__value);
+  //   setPieData(pie_data);
+  // };
 
-  const _get_transaction = async (chainId: string, address: string) => {
-    let res: SetStateAction<any> = await get_transaction(
-      chainId,
-      address,
-      "15"
-    );
-    setTransactions(res);
-  };
+  // const _get_transaction = async (chainId: string, address: string) => {
+  //   let res: SetStateAction<any> = await get_transaction(
+  //     chainId,
+  //     address,
+  //     "15"
+  //   );
+  //   setTransactions(res);
+  // };
 
-  useEffect(() => {
-    _get_chain();
-    if (address) {
-      _get_balance(chainId, address);
-      _get_transaction(chainId, address);
-    } else {
-      _get_balance(chainId, address_demo);
-      _get_transaction(chainId, address_demo);
-    }
-  }, []);
+  // useEffect(() => {
+  //   _get_chain();
+  //   if (address) {
+  //     _get_balance(chainId, address);
+  //     _get_transaction(chainId, address);
+  //   } else {
+  //     _get_balance(chainId, address_demo);
+  //     _get_transaction(chainId, address_demo);
+  //   }
+  // }, []);
 
   return (
     <div>

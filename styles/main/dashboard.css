@@ -107,6 +107,12 @@
   padding: 15px;
 }
 
+.center_title {
+  color: #FEFEFE;
+  font-size: 18px;
+  padding: 12px 16px 0px;
+}
+
 .transfer__token__form {
   display: flex;
   flex-direction: column;
@@ -161,11 +167,11 @@
   padding: 2px 16px;
 }
 
-.transfer__token__form__error {
+/* .transfer__token__form__error {
   color: red;
   margin: 2px 0px 0px 0px;
   font-size: 14px;
-}
+} */
 
 .check__address__form {
   margin-top: 10px;
@@ -213,7 +219,7 @@
 
 .query__balance__result {
   color: #ffffff;
-  font-size: 18px;
+  font-size: 36px;
   margin-top: 12px;
   font-family: monospace;
 }
@@ -356,7 +362,7 @@
   padding: 10px;
   justify-content: space-between;
 
-  align-items: start;
+  align-items: flex-start;
 }
 
 

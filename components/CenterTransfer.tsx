@@ -1,4 +1,10 @@
+import ERC20_ABI from "../utils/ERC20.json";
+import { ethers } from "ethers";
 import { Fragment, useState } from "react";
+import { BANK_CONTRACT, CHAIN_ID } from "../config";
+import { toast } from "react-toastify";
+import { useRouter } from "next/router";
+import { useAccount, useContractWrite, useWaitForTransaction } from "wagmi";
 
 interface Props {
   stable: any;
@@ -8,62 +14,169 @@ interface Props {
 }
 
 function CenterTransfer({ stable, crypto, transaction, bal }: Props) {
+  const router = useRouter();
+
+  const { address } = useAccount(); // address of user connected
+
   const [toggle, setToggle] = useState<string>("Custody");
 
-  const ov = [
-    {
-      quote: 5344.9346,
-      contract_ticker_symbol: "USDT",
-      logo_url:
-        "https://logos.covalenthq.com/tokens/1/0xdac17f958d2ee523a2206206994597c13d831ec7.png",
-    },
-    {
-      quote: 5344.9346,
-      contract_ticker_symbol: "USDT",
-      logo_url:
-        "https://logos.covalenthq.com/tokens/1/0xdac17f958d2ee523a2206206994597c13d831ec7.png",
-    },
-    {
-      quote: 5344.9346,
-      contract_ticker_symbol: "USDT",
-      logo_url:
-        "https://logos.covalenthq.com/tokens/1/0xdac17f958d2ee523a2206206994597c13d831ec7.png",
-    },
-    {
-      quote: 5344.9346,
-      contract_ticker_symbol: "USDT",
-      logo_url:
-        "https://logos.covalenthq.com/tokens/1/0xdac17f958d2ee523a2206206994597c13d831ec7.png",
-    },
-    {
-      quote: 5344.9346,
-      contract_ticker_symbol: "USDT",
-      logo_url:
-        "https://logos.covalenthq.com/tokens/1/0xdac17f958d2ee523a2206206994597c13d831ec7.png",
-    },
-  ];
-
-  const [erc20Adddress, setEC20Address] = useState<string>("");
-  const [erc20AdddressError, setEC20AddressError] = useState<string>(
-    "Address is invalid!"
-  );
+  const [erc20Adddress, setERC20Address] = useState<string>("");
+  const [erc20ToBankAdddress, setERC20ToBankAddress] = useState<string>("");
   const [addressTo, setAddressTo] = useState<string>("");
-  const [addressToError, setAddressToError] = useState<string>(
-    "Address is invalid!"
-  );
+  const [addressToBank, setAddressToBank] = useState<string>("");
   const [tokenAmount, setTokenAmount] = useState<string>("");
+  const [tokenAmountToBank, setTokenAmountToBank] = useState<string>("");
+  const [maticAdddressToBank, setMaticAddressToBank] = useState<string>("");
+  const [maticAmountToBank, setMaticAmountToBank] = useState<string>("");
 
-  const [ethAdddressTo, setEthAddressTo] = useState<string>("");
-  const [ethTokenAmount, setETHTokenAmount] = useState<string>("");
+  //------- TRANSFER ERC20 TOKEN IN CUSTODY -----------//
 
-  const handleERC20Submit = (e: any) => {
+  // approves ERC20 TOKEN TO DEPOSIT
+  const {
+    data: approveCustodyData,
+    write: approveERC20CustodyToken,
+    isLoading: approveCustodyLoading,
+    isError: approveERC20CustodyError,
+  } = useContractWrite({
+    mode: "recklesslyUnprepared",
+    addressOrName: erc20Adddress,
+    contractInterface: ERC20_ABI.abi,
+    functionName: "approve",
+    args: [
+      addressTo,
+      ethers.utils.parseEther(tokenAmount ? tokenAmount.toString() : "0"),
+    ],
+    chainId: CHAIN_ID,
+  });
+
+  const {
+    data: transferERC20CustodyData,
+    write: transferERC20CustodyToken,
+    isLoading: transferERC20CustodyLoading,
+    isError: transferERC20CustodyError,
+  } = useContractWrite({
+    mode: "recklesslyUnprepared",
+    addressOrName: erc20Adddress,
+    contractInterface: ERC20_ABI.abi,
+    functionName: "transfer",
+    args: [
+      addressTo,
+      ethers.utils.parseEther(tokenAmount ? tokenAmount.toString() : "0"),
+    ],
+    chainId: CHAIN_ID,
+  });
+
+  // resolve the form submission after the deposit is successful
+  const {
+    isError: approveERC20CustodyWaitError,
+    isLoading: approveERC20CustodyWaitLoading,
+  } = useWaitForTransaction({
+    hash: approveCustodyData?.hash,
+    onSuccess(data: any) {
+      transferERC20CustodyToken();
+    },
+    onError(error: any) {
+      toast.error("Failed to transfer Token!");
+    },
+  });
+
+  // resolve the form submission after the deposit is successful
+  const {
+    isError: transferERC20CustodyWaitError,
+    isLoading: transferERC20CustodyWaitLoading,
+  } = useWaitForTransaction({
+    hash: transferERC20CustodyData?.hash,
+    onSuccess(data: any) {
+      toast.success("Transfer Successful!");
+      router.push("/");
+    },
+    onError(error: any) {
+      toast.error("Failed to transfer Token!");
+    },
+  });
+
+  const handleERC20CustodySubmit = (e: any) => {
     e.preventDefault();
-    console.log({ erc20Adddress, addressTo, tokenAmount });
+
+    approveERC20CustodyToken();
+
+    if (transferERC20CustodyLoading || transferERC20CustodyWaitLoading) {
+      toast.loading("Loading!!!");
+    }
   };
 
-  const handleETHSubmit = (e: any) => {
+  //------- TRANSFER ERC20 TOKEN IN BANK -----------//
+  // function transferERC20Token(address _to, address _tokenAddress, uint _amount)
+  const {
+    data: transferERC20BankData,
+    write: transferERC20BankToken,
+    isLoading: transferERC20BankLoading,
+    isError: transferERC20BankError,
+  } = useContractWrite({
+    mode: "recklesslyUnprepared",
+    ...BANK_CONTRACT,
+    functionName: "transferERC20Token",
+    args: [
+      addressToBank,
+      erc20ToBankAdddress,
+      ethers.utils.parseEther(
+        tokenAmountToBank ? tokenAmountToBank.toString() : "0"
+      ),
+    ],
+    chainId: CHAIN_ID,
+  });
+
+  const {
+    isError: transferERC20BankWaitError,
+    isLoading: transferERC20BankWaitLoading,
+  } = useWaitForTransaction({
+    hash: transferERC20BankData?.hash,
+    onSuccess(data: any) {
+      toast.success("Transfer Successful!");
+      router.push("/");
+    },
+    onError(error: any) {
+      toast.error("Failed to transfer Token!");
+    },
+  });
+
+  const handleERC20BankSubmit = (e: any) => {
     e.preventDefault();
-    console.log({ ethAdddressTo, ethTokenAmount });
+
+    transferERC20BankToken();
+
+    if (transferERC20BankLoading) {
+      toast.loading("Loading!!!");
+    }
+  };
+
+  // function transferERC20Token(address _to, address _tokenAddress, uint _amount)
+  const {
+    data: transferMaticBankData,
+    write: transferMaticBankToken,
+    isLoading: transferMaticBankLoading,
+    isError: transferMaticBankError,
+  } = useContractWrite({
+    mode: "recklesslyUnprepared",
+    ...BANK_CONTRACT,
+    functionName: "transfer",
+    args: [
+      maticAdddressToBank,
+      ethers.utils.parseEther(
+        maticAmountToBank ? maticAmountToBank.toString() : "0"
+      ),
+    ],
+    chainId: CHAIN_ID,
+  });
+
+  const handleMaticBankSubmit = (e: any) => {
+    e.preventDefault();
+
+    transferMaticBankToken();
+
+    if (transferMaticBankLoading) {
+      toast.loading("Loading!!!");
+    }
   };
 
   return (
@@ -96,20 +209,20 @@ function CenterTransfer({ stable, crypto, transaction, bal }: Props) {
       {toggle === "Custody" ? (
         <Fragment>
           <div className="center__display">
+            <h4 className={"center_title"}>
+              Transfer ERC20 Token from your wallet to another user
+            </h4>
             <form
-              onSubmit={handleERC20Submit}
+              onSubmit={handleERC20CustodySubmit}
               className="transfer__token__form"
             >
               <div className="transfer__token__form__erc20">
                 <input
-                  onChange={(e) => setEC20Address(e.target.value)}
+                  onChange={(e) => setERC20Address(e.target.value)}
                   type="text"
                   placeholder="ERC20 Address"
                   className="transfer__token__form__erc20__input"
                 />
-                <p className="transfer__token__form__error">
-                  {erc20AdddressError}
-                </p>
               </div>
               <div className="transfer__token__form__addr__to">
                 <input
@@ -118,11 +231,6 @@ function CenterTransfer({ stable, crypto, transaction, bal }: Props) {
                   placeholder="Address To"
                   className="transfer__token__form__addr__to__input"
                 />
-                {addressToError && (
-                  <p className="transfer__token__form__error">
-                    {addressToError}
-                  </p>
-                )}
               </div>
               <div className="transfer__token__form__amount">
                 <div>
@@ -147,33 +255,35 @@ function CenterTransfer({ stable, crypto, transaction, bal }: Props) {
                   type="submit"
                   className="transfer__token__form__action__btn"
                 >
-                  Transfer
+                  Custody Transfer
                 </button>
               </div>
             </form>
           </div>
 
-          <div className="center__display" style={{ marginTop: "20px" }}>
-            <p className="uuu">Transfer ETH</p>
+          {/* <div className="center__display" style={{ marginTop: "20px" }}>
+            <h4 className={"center_title"}>
+              Transfer Matic from your wallet to another user
+            </h4>
 
-            <form onSubmit={handleETHSubmit} className="transfer__token__form">
+            <p className="uuu">Transfer Matic</p>
+
+            <form
+              onSubmit={handleMaticCustodySubmit}
+              className="transfer__token__form"
+            >
               <div className="transfer__token__form__addr__to">
                 <input
-                  onChange={(e) => setEthAddressTo(e.target.value)}
+                  onChange={(e) => setMaticAddress(e.target.value)}
                   type="text"
                   placeholder="Address To"
                   className="transfer__token__form__addr__to__input"
                 />
-                {addressToError && (
-                  <p className="transfer__token__form__error">
-                    {addressToError}
-                  </p>
-                )}
               </div>
               <div className="transfer__token__form__amount">
                 <div>
                   <input
-                    onChange={(e) => setETHTokenAmount(e.target.value)}
+                    onChange={(e) => setMaticAmount(e.target.value)}
                     type="text"
                     placeholder="Amount"
                     className="transfer__token__form__amount__input"
@@ -195,43 +305,38 @@ function CenterTransfer({ stable, crypto, transaction, bal }: Props) {
                 </button>
               </div>
             </form>
-          </div>
+          </div> */}
         </Fragment>
       ) : (
         <Fragment>
           <div className="center__display">
+            <h4 className={"center_title"}>
+              Transfer ERC 20 from your consense wallet to another user
+            </h4>
             <form
-              onSubmit={handleERC20Submit}
+              onSubmit={handleERC20BankSubmit}
               className="transfer__token__form"
             >
               <div className="transfer__token__form__erc20">
                 <input
-                  onChange={(e) => setEC20Address(e.target.value)}
+                  onChange={(e) => setERC20ToBankAddress(e.target.value)}
                   type="text"
                   placeholder="ERC20 Address"
                   className="transfer__token__form__erc20__input"
                 />
-                <p className="transfer__token__form__error">
-                  {erc20AdddressError}
-                </p>
               </div>
               <div className="transfer__token__form__addr__to">
                 <input
-                  onChange={(e) => setAddressTo(e.target.value)}
+                  onChange={(e) => setAddressToBank(e.target.value)}
                   type="text"
                   placeholder="Address To"
                   className="transfer__token__form__addr__to__input"
                 />
-                {addressToError && (
-                  <p className="transfer__token__form__error">
-                    {addressToError}
-                  </p>
-                )}
               </div>
               <div className="transfer__token__form__amount">
                 <div>
                   <input
-                    onChange={(e) => setTokenAmount(e.target.value)}
+                    onChange={(e) => setTokenAmountToBank(e.target.value)}
                     type="text"
                     placeholder="Amount"
                     className="transfer__token__form__amount__input"
@@ -251,33 +356,34 @@ function CenterTransfer({ stable, crypto, transaction, bal }: Props) {
                   type="submit"
                   className="transfer__token__form__action__btn"
                 >
-                  Transfer
+                  Wallet Transfer
                 </button>
               </div>
             </form>
           </div>
 
           <div className="center__display" style={{ marginTop: "20px" }}>
+            <h4 className={"center_title"}>
+              Transfer Matic from your consense wallet to another user
+            </h4>
             <p className="uuu">Transfer ETH</p>
 
-            <form onSubmit={handleETHSubmit} className="transfer__token__form">
+            <form
+              onSubmit={handleMaticBankSubmit}
+              className="transfer__token__form"
+            >
               <div className="transfer__token__form__addr__to">
                 <input
-                  onChange={(e) => setEthAddressTo(e.target.value)}
+                  onChange={(e) => setMaticAddressToBank(e.target.value)}
                   type="text"
                   placeholder="Address To"
                   className="transfer__token__form__addr__to__input"
                 />
-                {addressToError && (
-                  <p className="transfer__token__form__error">
-                    {addressToError}
-                  </p>
-                )}
               </div>
               <div className="transfer__token__form__amount">
                 <div>
                   <input
-                    onChange={(e) => setETHTokenAmount(e.target.value)}
+                    onChange={(e) => setMaticAmountToBank(e.target.value)}
                     type="text"
                     placeholder="Amount"
                     className="transfer__token__form__amount__input"

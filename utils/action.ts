@@ -6,6 +6,7 @@ import axios from "axios";
 // const APIKEY = process.env.API_KEY;
 const APIKEY = "ckey_734f1d56d86f424cad81af0241d";
 const baseURL = "https://api.covalenthq.com/v1";
+const chainId = "80001";
 
 function filter_nft(item: any) {
   return item.type == "nft";
@@ -41,7 +42,7 @@ export const get_chain = async () => {
 };
 
 // this would be returning the balances of the user
-export const get_balances = async (chainId: string, address: string) => {
+export const get_balances = async (address: any) => {
   let r_nft = null;
   let r_cryptocurrency: any = null;
   let r_stablecoin: any = null;
@@ -51,7 +52,7 @@ export const get_balances = async (chainId: string, address: string) => {
 
   await axios
     .get(
-      `${baseURL}/${chainId}/address/${address}/balances_v2/?key=${APIKEY}&page-size&nft=true&no-nft-fetch=false`
+      `${baseURL}/${chainId}/address/${address}/balances_v2/?key=${APIKEY}&page-size&nft=false&no-nft-fetch=false`
     )
     .then((data) => {
       let items = data.data.data.items;
@@ -65,18 +66,20 @@ export const get_balances = async (chainId: string, address: string) => {
     `${baseURL}/${chainId}/address/${address}/balances_v2/?key=${APIKEY}&page-size&nft=true&no-nft-fetch=false`
   );
 
-  if (r_stable_and__crypto.length) {
+  if (r_stable_and__crypto?.length) {
     for (let i = 0; i < r_stable_and__crypto.length; i++) {
       asset__value += r_stable_and__crypto[i].quote;
     }
   }
 
-  if (r_stablecoin.length) {
+  if (r_stablecoin?.length) {
     for (let i = 0; i < r_stablecoin.length; i++) {
       stable_asset__value += r_stablecoin[i].quote;
     }
   }
 
+  
+  
   let pie_data = [
     {
       name: "Stable",
@@ -84,11 +87,11 @@ export const get_balances = async (chainId: string, address: string) => {
     },
     {
       name: r_cryptocurrency[0]
-        ? r_cryptocurrency[0].contract_ticker_symbol
+      ? r_cryptocurrency[0].contract_ticker_symbol
         : "",
-      dig: r_cryptocurrency[0] ? r_cryptocurrency[0].quote : 0,
-    },
-    {
+        dig: r_cryptocurrency[0] ? r_cryptocurrency[0].quote : 0,
+      },
+      {
       name: r_cryptocurrency[1]
         ? r_cryptocurrency[1].contract_ticker_symbol
         : "",
@@ -98,16 +101,18 @@ export const get_balances = async (chainId: string, address: string) => {
       name: r_cryptocurrency[2]
         ? r_cryptocurrency[1].contract_ticker_symbol
         : "",
-      dig: r_cryptocurrency[2] ? r_cryptocurrency[1].quote : 0,
-    },
-    {
-      name: r_cryptocurrency[3]
+        dig: r_cryptocurrency[2] ? r_cryptocurrency[1].quote : 0,
+      },
+      {
+        name: r_cryptocurrency[3]
         ? r_cryptocurrency[1].contract_ticker_symbol
         : "",
-      dig: r_cryptocurrency[3] ? r_cryptocurrency[1].quote : 0,
-    },
-  ];
-
+        dig: r_cryptocurrency[3] ? r_cryptocurrency[1].quote : 0,
+      },
+    ];
+    
+    console.log(r_cryptocurrency);
+    console.log(stable_asset__value);
   return [r_cryptocurrency, r_stablecoin, r_nft, asset__value, pie_data];
 };
 

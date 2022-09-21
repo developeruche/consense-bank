@@ -1,4 +1,5 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { ConnectKitButton } from "connectkit";
 import Link from "next/link";
 import React, { useState } from "react";
 import ClickAwayListener from "react-click-away-listener";
@@ -61,11 +62,12 @@ const Navbar = () => {
                 <ClickAwayListener onClickAway={() => setIsDropdown(false)}>
                   <div className="dropdown-details">
                     <div>
-                      <ConnectButton
+                      {/* <ConnectButton
                         accountStatus="avatar"
                         chainStatus="icon"
                         showBalance={false}
-                      />
+                      /> */}
+                      <ConnectKitButton />
                     </div>
                     <div
                       onClick={() => setMultiSig(true)}

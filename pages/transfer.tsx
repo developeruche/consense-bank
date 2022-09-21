@@ -40,32 +40,26 @@ const Transfer: NextPage = () => {
 
   const _get_balance = async (chainId: string, address: string) => {
     let [r_cryptocurrency, r_stablecoin, r_nft, asset__value, pie_data] =
-      await get_balances(chainId, address);
+      await get_balances(address);
     setCrypto(r_cryptocurrency);
     setStablecoin(r_stablecoin);
-    setNft(r_nft);
+    // setNft(r_nft);
     setBal(asset__value);
-    setPieData(pie_data);
+    // setPieData(pie_data);
   };
 
-  const _get_transaction = async (chainId: string, address: string) => {
-    let res: SetStateAction<any> = await get_transaction(
-      chainId,
-      address,
-      "15"
-    );
-    setTransactions(res);
-  };
+  // const _get_transaction = async (chainId: string, address: string) => {
+  //   let res: SetStateAction<any> = await get_transaction(
+  //     chainId,
+  //     address,
+  //     "15"
+  //   );
+  //   setTransactions(res);
+  // };
 
   useEffect(() => {
     _get_chain();
-    if (address) {
-      _get_balance(chainId, address);
-      _get_transaction(chainId, address);
-    } else {
-      _get_balance(chainId, address_demo);
-      _get_transaction(chainId, address_demo);
-    }
+    // _get_balance(chainId, address);
   }, []);
 
   return (

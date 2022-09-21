@@ -1,49 +1,36 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
-import "@rainbow-me/rainbowkit/styles.css";
 
-import {
-  getDefaultWallets,
-  RainbowKitProvider,
-  darkTheme,
-} from "@rainbow-me/rainbowkit";
-import { chain, configureChains, createClient, WagmiConfig } from "wagmi";
-import { alchemyProvider } from "wagmi/providers/alchemy";
-import { publicProvider } from "wagmi/providers/public";
+import { WagmiConfig, createClient, chain } from "wagmi";
+import { ConnectKitProvider, getDefaultClient } from "connectkit";
 
-const { chains, provider } = configureChains(
-  [chain.mainnet, chain.polygon, chain.optimism, chain.arbitrum],
-  [alchemyProvider({ apiKey: process.env.ALCHEMY_ID }), publicProvider()]
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+const alchemyId = process.env.ALCHEMY_ID;
+
+const chains = [
+  // chain.polygon,
+  chain.polygonMumbai
+];
+
+const client = createClient(
+  getDefaultClient({
+    appName: "ConsenseBank",
+    alchemyId,
+    chains,
+  })
 );
-
-const { connectors } = getDefaultWallets({
-  appName: "CoinDAO | stats",
-  chains,
-});
-
-const wagmiClient = createClient({
-  autoConnect: true,
-  connectors,
-  provider,
-});
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <WagmiConfig client={wagmiClient}>
-      <RainbowKitProvider
-        chains={chains}
-        theme={darkTheme({
-          accentColor: "#7b3fe4",
-          accentColorForeground: "white",
-          borderRadius: "small",
-          fontStack: "system",
-          overlayBlur: "small",
-        })}
-      >
+    <WagmiConfig client={client}>
+      <ConnectKitProvider>
         <Component {...pageProps} />
-
+        <ToastContainer />
         <div id="app-modal-root" />
-      </RainbowKitProvider>
+      </ConnectKitProvider>
     </WagmiConfig>
   );
 }

@@ -40,7 +40,7 @@ const Home: NextPage = () => {
 
   const _get_balance = async (chainId: string, address: string) => {
     let [r_cryptocurrency, r_stablecoin, r_nft, asset__value, pie_data] =
-      await get_balances(chainId, address);
+      await get_balances(address);
     setCrypto(r_cryptocurrency);
     setStablecoin(r_stablecoin);
     setNft(r_nft);
