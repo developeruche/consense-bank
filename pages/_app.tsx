@@ -11,8 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const alchemyId = process.env.ALCHEMY_ID;
 
 const chains = [
-  // chain.polygon,
-  chain.polygonMumbai
+  chain.polygon,
 ];
 
 const client = createClient(
